@@ -89,13 +89,13 @@ public static class ShimmerExtensions
 
     private static void OnDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is not FrameworkElement element || e.NewValue is not Duration _newDuration)
+        if (d is not FrameworkElement element || e.NewValue is not TimeSpan _newDuration)
         {
             return;
         }
 
         var helper = GetShimmeringHelper(element);
-        helper.Duration = _newDuration.TimeSpan;
+        helper.Duration = _newDuration;
     }
     #endregion
 

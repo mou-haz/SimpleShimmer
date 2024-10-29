@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using Microsoft.Graphics.Canvas.Geometry;
 using Microsoft.UI;
@@ -228,24 +229,25 @@ public sealed class ShimmeringHelper
         StopAnimation();
 
         var width = GetElementWidth(element);
-
-        _maskVisual.Size = new Vector2(width, GetElementHeight(element));
+        var startOffset = -width / 2;
+        var endOffset = width * 2;
 
         if (element is Panel panel)
         {
             _maskBrush.Mask = CreateCustomMaskBrushForPanel(compositor, panel);
         }
 
-        if (element is not Shape and not TextBlock)
+        else if (element is not Shape and not TextBlock)
         {
             HandleCornerRadiusClip(element, compositor, _maskVisual);
         }
 
+        _maskVisual.Size = new Vector2(width, GetElementHeight(element));
         //confirm animation beginning, if removed will need to reset gradien offset in StartAnimation()
-        _animation.InsertKeyFrame(0f, -width / 2, _animationEasing);
+        _animation.InsertKeyFrame(0f, startOffset, _animationEasing);
 
         //u can just make it width, width * 2 (the difference between animation and actual _maskVisual Width) gives a pause between iterations
-        _animation.InsertKeyFrame(1f, width * 2, _animationEasing);
+        _animation.InsertKeyFrame(1f, endOffset, _animationEasing);
 
         if (IsActive)
         {
@@ -400,6 +402,7 @@ public sealed class ShimmeringHelper
             return newBrush;
         }
 
+        Debug.WriteLine($"[ShimmeringHelper] non handled Brush Type: {source.GetType()}");
         return null;
     }
 
