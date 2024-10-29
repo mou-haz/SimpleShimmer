@@ -34,7 +34,7 @@ public sealed class ShimmeringBehavior : Behavior<FrameworkElement>
         set => SetValue(IsActiveProperty, value);
     }
 
-    public static readonly DependencyProperty IsActiveProperty = DependencyProperty.RegisterAttached(
+    public static readonly DependencyProperty IsActiveProperty = DependencyProperty.Register(
            nameof(IsActive),
            typeof(bool),
            typeof(ShimmeringBehavior),
@@ -58,7 +58,7 @@ public sealed class ShimmeringBehavior : Behavior<FrameworkElement>
         set => SetValue(ColorProperty, value);
     }
 
-    public static readonly DependencyProperty ColorProperty = DependencyProperty.RegisterAttached(
+    public static readonly DependencyProperty ColorProperty = DependencyProperty.Register(
            nameof(Color),
           typeof(Color?),
           typeof(ShimmeringBehavior),
@@ -82,7 +82,7 @@ public sealed class ShimmeringBehavior : Behavior<FrameworkElement>
         set => SetValue(BrushProperty, value);
     }
 
-    public static readonly DependencyProperty BrushProperty = DependencyProperty.RegisterAttached(
+    public static readonly DependencyProperty BrushProperty = DependencyProperty.Register(
            nameof(Brush),
           typeof(Brush),
           typeof(ShimmeringBehavior),
@@ -105,7 +105,7 @@ public sealed class ShimmeringBehavior : Behavior<FrameworkElement>
         get => (TimeSpan)GetValue(DurationProperty);
         set => SetValue(DurationProperty, value);
     }
-    public static readonly DependencyProperty DurationProperty = DependencyProperty.RegisterAttached(
+    public static readonly DependencyProperty DurationProperty = DependencyProperty.Register(
            nameof(Duration),
           typeof(TimeSpan),
           typeof(ShimmeringBehavior),
