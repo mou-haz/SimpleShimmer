@@ -5,6 +5,10 @@
     <RootNamespace>SimpleShimmer</RootNamespace>
     <UseWinUI>true</UseWinUI>
 	<WindowsSdkPackageVersion>10.0.22621.38</WindowsSdkPackageVersion>
+	<Authors>Mohamed Hazem</Authors>
+	<PackageProjectUrl>https://github.com/mouhamedhazem149/SimpleShimmer</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/mouhamedhazem149/SimpleShimmer</RepositoryUrl>
+	<description>Shimmering animation helper for WinUI</description>
   </PropertyGroup>
 
   <ItemGroup>

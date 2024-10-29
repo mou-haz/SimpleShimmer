@@ -413,20 +413,20 @@ public sealed class ShimmeringHelper
         var lum = originColor.GetBrightness() * change;
         var hue = originColor.GetHue();
         var sat = originColor.GetSaturation();
-        return GetColorFromHSL(lum, hue, sat, origin.A);
+        return GetColorFromHSL(lum, hue, sat);
     }
 
-    private static Color GetColorFromHSL(float lum, float hue, float sat, byte alpha)
+    private static Color GetColorFromHSL(float lum, float hue, float sat)
     {
         if (lum == 0)
         {
-            return Windows.UI.Color.FromArgb(alpha, 0, 0, 0);
+            return Windows.UI.Color.FromArgb(0xFF, 0, 0, 0);
         }
 
         if (sat == 0)
         {
             var _lum = (byte)(255 * lum);
-            return Windows.UI.Color.FromArgb(alpha, _lum, _lum, _lum);
+            return Windows.UI.Color.FromArgb(0xFF, _lum, _lum, _lum);
         }
 
         var temp = lum < 0.5
@@ -438,7 +438,7 @@ public sealed class ShimmeringHelper
         var r = GetColorComponent(temp, temp1, hue + 1.0 / 3.0);
         var g = GetColorComponent(temp, temp1, hue);
         var b = GetColorComponent(temp, temp1, hue - 1.0 / 3.0);
-        return Windows.UI.Color.FromArgb(alpha, r, g, b);
+        return Windows.UI.Color.FromArgb(0xFF, r, g, b);
     }
 
     private static byte GetColorComponent(double temp, double temp1, double adjustedHue)
