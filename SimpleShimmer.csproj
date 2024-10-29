@@ -9,7 +9,23 @@
 	<PackageProjectUrl>https://github.com/mouhamedhazem149/SimpleShimmer</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/mouhamedhazem149/SimpleShimmer</RepositoryUrl>
 	<description>Shimmering animation helper for WinUI</description>
+	<Version>1.0.2</Version>
   </PropertyGroup>
+  
+	<ItemGroup>
+    <Compile Remove="images\**" />
+    <Content Remove="images\**" />
+    <EmbeddedResource Remove="images\**" />
+    <None Remove="images\**" />
+    <Page Remove="images\**" />
+    <PRIResource Remove="images\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="LICENSE" />
+    <None Remove="README.md" />
+  </ItemGroup>
 
   <ItemGroup>
 
