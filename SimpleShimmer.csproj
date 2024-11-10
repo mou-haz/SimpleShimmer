@@ -4,12 +4,13 @@
     <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
     <RootNamespace>SimpleShimmer</RootNamespace>
     <UseWinUI>true</UseWinUI>
-	<WindowsSdkPackageVersion>10.0.22621.38</WindowsSdkPackageVersion>
-	<Authors>Mohamed Hazem</Authors>
-	<PackageProjectUrl>https://github.com/mouhamedhazem149/SimpleShimmer</PackageProjectUrl>
-	<RepositoryUrl>https://github.com/mouhamedhazem149/SimpleShimmer</RepositoryUrl>
-	<description>Shimmering animation helper for WinUI</description>
-	<Version>1.0.2</Version>
+  	<Authors>Mohamed Hazem</Authors>
+  	<PackageProjectUrl>https://github.com/mouhamedhazem149/SimpleShimmer</PackageProjectUrl>
+  	<RepositoryUrl>https://github.com/mouhamedhazem149/SimpleShimmer</RepositoryUrl>
+  	<description>Shimmering animation helper for WinUI</description>
+  	<Version>1.0.3</Version>
+	<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &gt;= 8">win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+	<RuntimeIdentifiers Condition="$([MSBuild]::GetTargetFrameworkVersion('$(TargetFramework)')) &lt; 8">win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
   </PropertyGroup>
   
 	<ItemGroup>
@@ -30,7 +31,7 @@
   <ItemGroup>
 
 	  <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.2.0" />
-	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.240829007" />
+	  <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.5.241001000" />
 	  <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1" />
 	  <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
 

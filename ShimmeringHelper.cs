@@ -116,8 +116,6 @@ public sealed class ShimmeringHelper
         {
             HandleCornerRadiusClip(_associatedObject, _compositor, _maskVisual);
         }
-
-        ElementCompositionPreview.SetElementChildVisual(_associatedObject, _maskVisual);
     }
 
     private void UpdateMaskBrush(Compositor _compositor)
@@ -277,12 +275,14 @@ public sealed class ShimmeringHelper
 
     private void StartAnimation()
     {
+        ElementCompositionPreview.SetElementChildVisual(_associatedObject, _maskVisual);
         _maskBrush.Source?.StartAnimation("Offset.X", _animation);
     }
 
     private void StopAnimation()
     {
         _maskBrush.Source?.StopAnimation("Offset.X");
+        ElementCompositionPreview.SetElementChildVisual(_associatedObject, null);
     }
 
     private static void HandleCornerRadiusClip(FrameworkElement element, Compositor _compositor, SpriteVisual _mask)
@@ -413,10 +413,23 @@ public sealed class ShimmeringHelper
         var lum = originColor.GetBrightness() * change;
         var hue = originColor.GetHue();
         var sat = originColor.GetSaturation();
-        return GetColorFromHSL(lum, hue, sat);
+        return GetColorFromHSL(lum, hue, sat, origin.A);
     }
+    
+    private static Color GetColorFromHSL(float lum, float hue, float sat, byte alpha)
+    {
+        var a = sat * Math.Min(lum, 1 - lum);
+        return Windows.UI.Color.FromArgb(alpha, nFunk(0, hue, lum , a), nFunk(8, hue, lum , a), nFunk(4, hue, lum , a));
 
-    private static Color GetColorFromHSL(float lum, float hue, float sat)
+        static byte nFunk(double n, double hue, double lum, double a)
+        {
+            var k = (n + hue / 30) % 12;
+            var factor = Math.Clamp(Math.Min(k - 3, 9 - k), -1, 1);
+            return (byte)Math.Round((lum - a * factor) * 255);
+        }
+    }
+    
+    private static Color GetColorFromHSL2(float lum, float hue, float sat)
     {
         if (lum == 0)
         {
