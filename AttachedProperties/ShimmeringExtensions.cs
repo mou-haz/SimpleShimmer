@@ -81,7 +81,7 @@ public static class ShimmerExtensions
             "Duration",
             typeof(TimeSpan?),
             typeof(ShimmerExtensions),
-            new PropertyMetadata(TimeSpan.FromSeconds(1), OnDurationChanged));
+            new PropertyMetadata((TimeSpan?)TimeSpan.FromSeconds(1), OnDurationChanged));
 
     public static TimeSpan? GetDuration(FrameworkElement element) => (TimeSpan?)element.GetValue(DurationProperty);
 
