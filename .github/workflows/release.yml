@@ -29,7 +29,7 @@ jobs:
       run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
 
     - name: Push
       run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${GITHUB_TOKEN}
