@@ -33,4 +33,4 @@ jobs:
       
       - name: Build SimpleShimmer
         shell: pwsh
-        run: msbuild ./SimpleShimmer/SimpleShimmer.csproj /r
+        run: msbuild ./SimpleShimmer.csproj /r
