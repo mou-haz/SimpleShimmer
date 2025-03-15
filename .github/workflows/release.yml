@@ -1,12 +1,11 @@
 on:
   push:
-    branches:
-    - main
     tags:
     - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build:
+    if: github.ref == 
     runs-on: windows-latest
     timeout-minutes: 60
 
@@ -29,7 +28,7 @@ jobs:
       run: dotnet test --configuration Release /p:Version=${VERSION} --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
 
     - name: Push
       run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${GITHUB_TOKEN}
