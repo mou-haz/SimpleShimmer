@@ -34,8 +34,15 @@ jobs:
       shell: pwsh # Use PowerShell for better string handling
     #  run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
+    - name: Set VERSION variable from tag
+      shell: cmd
+      run: echo "VERSION2=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+    
     - name: Debug VERSION
       run: echo "Version is ${{ env.VERSION }}"
+
+    - name: Debug VERSION2
+      run: echo "Version is ${VERSION2}, Version2 is ${VERSION}"
 
     - name: Build SimpleShimmer
       run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
