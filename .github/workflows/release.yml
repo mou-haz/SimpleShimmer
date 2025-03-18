@@ -44,10 +44,6 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${{ steps.next_minor.outputs.patch }} --no-build --output .
 
-    #- name: Pack
-    #  shell: pwsh
-    #  run: msbuild ./SimpleShimmer.csproj /t:pack /property:Configuration=Release
-
     - name: Push to NuGet
       run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
 
