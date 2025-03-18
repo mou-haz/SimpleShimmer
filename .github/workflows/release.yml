@@ -30,9 +30,9 @@ jobs:
 
     - name: Push New Tag
       run: |
-        git tag v${{ steps.next_minor.outputs.patch }}
-        git push origin --tags --follow-tags v${{ steps.next_minor.outputs.patch }}
-        git push https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git --tags --follow-tags
+        git tag -a v${{ steps.next_minor.outputs.patch }} -m "version: v${{ steps.next_minor.outputs.patch }}"
+        git push --atomic origin v${{ steps.next_minor.outputs.patch }}
+        git push --atomic https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git v${{ steps.next_minor.outputs.patch }}
 
     - name: Install Dependencies
       timeout-minutes: 10
