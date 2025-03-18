@@ -31,7 +31,7 @@ jobs:
     - name: Push New Tag
       run: |
         git tag ${{ steps.next_minor.outputs.patch }}
-        git push origin --tags --follow-tags -u mou-haz:${{ secrets.GithubPackages_Key }} ${{ steps.next_minor.outputs.patch }}
+        git push origin --tags --follow-tags ${{ steps.next_minor.outputs.patch }}
 
     - name: Install Dependencies
       timeout-minutes: 10
