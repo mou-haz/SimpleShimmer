@@ -28,8 +28,9 @@ jobs:
           incrementType: Patch
           isPrerelease: ${{ github.ref != 'refs/heads/main' }}
           push: true
-          gitUserName: "mou-haz"
-          gitUserEmail: ${{ secrets.CI_Credentials }}
+          gitUserName: "gihub-Action"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUBPACKAGES_KEY }}
 
       - run: |
           echo currentVersion "${{ steps.next_minor.outputs.currentVersion }}"
