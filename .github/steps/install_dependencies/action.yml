@@ -14,6 +14,15 @@ inputs:
 runs:
   using: "composite"
   steps:
+    # Cache .NET SDK
+    - name: Cache .NET SDK
+      uses: actions/cache@v3
+      with:
+        path: ~/.dotnet # Path to the installed .NET SDK
+        key: dotnet-sdk-${{ inputs.dotnet-version }}-${{ runner.os }}
+        restore-keys: |
+          dotnet-sdk-${{ runner.os }}
+
     # Install .NET
     - name: Setup .NET ${{ inputs.dotnet-version }}
       uses: actions/setup-dotnet@v3
