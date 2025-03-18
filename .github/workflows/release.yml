@@ -19,18 +19,21 @@ jobs:
     - name: Install Dependencies
       timeout-minutes: 10
       uses: "./.github/steps/install_dependencies"
-
-    - name: Get Previous tag
-      id: previoustag
-      uses: 'WyriHaximus/github-action-get-previous-tag@v1'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
-        
+    
     - name: Get next minor version
       id: next_minor
-      uses: "WyriHaximus/github-action-next-semvers@v1"
+      uses: chancie86/github-action-version-tag@v0.0.2
       with:
-        version: ${{ steps.previoustag.outputs.tag }}
+        versionPrefix: "v"
+        incrementType: Patch
+        isPrerelease: ${{ github.ref != 'refs/heads/main' }}
+        push: true
+        gitUserName: "github-actions[bot]"
+        gitUserEmail: "github-actions[bot]@users.noreply.github.com"
+
+    - run: |
+      echo currentVersion "${{ steps.next_minor.outputs.currentVersion }}"
+      echo nextVersion "${{ steps.next_minor.outputs.nextVersion }}"
 
     - name: Build SimpleShimmer
       run: dotnet build --configuration Release
@@ -39,21 +42,12 @@ jobs:
       run: dotnet test --configuration Release --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${{ steps.next_minor.outputs.patch }} --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${{ steps.next_minor.outputs.nextVersion }} --no-build --output .
 
     - name: Push to NuGet
-      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
+      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.nextVersion }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
     
-    - name: Push New Tag
-      run: |
-        git config user.name "mou-haz"
-        git config user.email "mou-haz@users.noreply.github.com"
-        git tag ${{ steps.next_minor.outputs.patch }}
-        git push origin ${{ steps.next_minor.outputs.patch }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
-
     - name: Push
-      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
+      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.nextVersion }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
