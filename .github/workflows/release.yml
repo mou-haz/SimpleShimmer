@@ -23,9 +23,17 @@ jobs:
       timeout-minutes: 10
       uses: "./.github/steps/install_dependencies"
 
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.3.1
+    
     - name: Set VERSION variable from tag
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-      
+    
+    - name: Build SimpleShimmer
+      shell: pwsh
+      run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
+
     - name: Build
       run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION}
 
