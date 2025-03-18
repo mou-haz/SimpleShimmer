@@ -7,7 +7,6 @@ on:
 
 jobs:
   build:
-    if: github.ref == 'refs/heads/main'
     runs-on: windows-latest
     timeout-minutes: 60
 
@@ -37,7 +36,12 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.Nu_Key }}
 
-    #- name: Push
-    #  run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://nuget.pkg.github.com/mou-haz/index.json --api-key ${GITHUB_TOKEN}
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.Nu_Key }}
+    - name: Push
+      run: dotnet nuget add source --username mou-haz --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mou-haz/index.json"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
+
+    - name: Push
+      run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://nuget.pkg.github.com/mou-haz/index.json --api-key ${GITHUB_TOKEN}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
