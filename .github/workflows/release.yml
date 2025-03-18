@@ -28,6 +28,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.1
     
     - name: Set VERSION variable from tag
+      shell: cmd
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
     - name: Build SimpleShimmer
@@ -35,11 +36,12 @@ jobs:
       run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
 
     - name: Test
-      run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build
+      shell: cmd
+      run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build
 
     - name: Pack
       shell: cmd
-      run: dotnet pack --configuration Release --runtime win-x64 /p:PackageVersion=${VERSION} /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build --output .
 
     #- name: Pack
     #  shell: pwsh
