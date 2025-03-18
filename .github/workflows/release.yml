@@ -28,35 +28,25 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.1
     
     - name: Set VERSION variable from tag
-      shell: cmd
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
     - name: Build SimpleShimmer
-      shell: pwsh
       run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
 
     - name: Test
-      shell: cmd
       run: dotnet test --configuration Release --runtime win-x64 --no-build
 
     - name: Pack
-      shell: cmd
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=%VERSION% --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${{ env.VERSION }} --no-build --output .
 
     #- name: Pack
     #  shell: pwsh
     #  run: msbuild ./SimpleShimmer.csproj /t:pack /property:Configuration=Release
 
     - name: Push to NuGet
-      shell: cmd
-      run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
-
-    - name: Push to GithubPackages
-      shell: cmd
-      run: dotnet nuget add source --username mou-haz --password ${{ secrets.GithubPackages_Key }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/mou-haz/index.json"
+      run: dotnet nuget push SimpleShimmer.${{ env.VERSION }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
 
     - name: Push
-      shell: cmd
-      run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
+      run: dotnet nuget push SimpleShimmer.${{ env.VERSION }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
