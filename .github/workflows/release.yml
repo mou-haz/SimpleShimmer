@@ -37,8 +37,12 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build
 
+    #- name: Pack
+    #  run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
+
     - name: Pack
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
+      shell: pwsh
+      run: msbuild ./SimpleShimmer.csproj /t:pack /property:Configuration=Release
 
     - name: Push
       run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${GITHUB_TOKEN}
