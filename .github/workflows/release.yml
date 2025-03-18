@@ -2,8 +2,7 @@ name: NuGet Publish
 
 on:
   push:
-    tags:
-    - "v[0-9]+.[0-9]+.[0-9]+"
+    branches: main/**
 
 jobs:
   build:
@@ -15,11 +14,6 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0 # required for github-action-get-previous-tag
-
-    - name: Verify commit exists in origin/main
-      run: |
-        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
-        git branch --remote --contains | grep origin/main
 
     - name: Install Dependencies
       timeout-minutes: 10
@@ -44,8 +38,14 @@ jobs:
       with:
         version: ${{ steps.previoustag.outputs.tag }}
 
+     - name: 'Get next minor version'
+      id: next
+      uses: "WyriHaximus/github-action-next-semvers@v1"
+      with:
+        version: ${{ steps.previoustag.outputs.tag }}
+
     - name: New VERSION
-      run: echo "New Version is ${{ steps.next.outputs.version }}"
+      run: echo "New Version is ${{ steps.next.outputs.patch }}"
 
     - name: Build SimpleShimmer
       run: dotnet build --configuration Release --runtime win-x64
@@ -54,16 +54,16 @@ jobs:
       run: dotnet test --configuration Release --runtime win-x64 --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=$${{ steps.next.outputs.version }} --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${{ steps.next.outputs.patch }} --no-build --output .
 
     #- name: Pack
     #  shell: pwsh
     #  run: msbuild ./SimpleShimmer.csproj /t:pack /property:Configuration=Release
 
     - name: Push to NuGet
-      run: dotnet nuget push SimpleShimmer.$${{ steps.next.outputs.version }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
+      run: dotnet nuget push SimpleShimmer.${{ steps.next.outputs.patch }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
 
     - name: Push
-      run: dotnet nuget push SimpleShimmer.$${{ steps.next.outputs.version }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
+      run: dotnet nuget push SimpleShimmer.${{ steps.next.outputs.patch }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}

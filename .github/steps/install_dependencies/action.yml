@@ -28,9 +28,23 @@ runs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '${{ inputs.dotnet-version }}'
+    
+    # Cache Windows SDK files
+    - name: Cache Windows SDK
+      uses: actions/cache@v3
+      with:
+        path: C:\WindowsKits
+        key: windows-sdk-${{ inputs.sdkVersion }}
+        restore-keys: |
+          windows-sdk-
 
-    # Install Windows SDK
+    # Install Windows SDK (if not already cached)
     - name: Install Windows SDK ${{ inputs.sdkVersion }}
       shell: pwsh
       if: ${{ runner.os == 'Windows' }}
-      run: .\.github\Install-WindowsSdkISO.ps1 ${{ inputs.sdkVersion }}
+      run: |
+        if (-not (Test-Path "C:\WindowsKits\10\$(${{ inputs.sdkVersion }})")) {
+            .\.github\Install-WindowsSdkISO.ps1 ${{ inputs.sdkVersion }}
+        } else {
+            Write-Host "Windows SDK already cached. Skipping installation."
+        }
