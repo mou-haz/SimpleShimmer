@@ -28,7 +28,11 @@ jobs:
       uses: microsoft/setup-msbuild@v1.3.1
     
     - name: Set VERSION variable from tag
-      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+      run: |
+          $VERSION = "${{ github.ref }}" -replace 'refs/tags/v', ''
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+      shell: pwsh # Use PowerShell for better string handling
+    #  run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
     - name: Build SimpleShimmer
       run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
