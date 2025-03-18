@@ -1,4 +1,4 @@
-# SimpleShimmer
+# SimpleShimmer                          [![Build](https://github.com/mou-haz/SimpleShimmer/actions/workflows/ci.yml/badge.svg)](https://github.com/mou-haz/SimpleShimmer/actions/workflows/ci.yml)  [![NuGet Publish](https://github.com/mou-haz/SimpleShimmer/actions/workflows/release.yml/badge.svg)](https://github.com/mou-haz/SimpleShimmer/actions/workflows/release.yml)
  Shimmering animation helper for winui
 
 # Screenshots
