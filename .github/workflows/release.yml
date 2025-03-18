@@ -34,9 +34,6 @@ jobs:
       shell: pwsh
       run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
 
-    - name: Build
-      run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION}
-
     - name: Test
       run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build
 
