@@ -35,7 +35,7 @@ jobs:
     #  run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
     - name: Set VERSION variable from tag
-      shell: cmd
+      shell: pwsh
       run: echo "VERSION2=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
     
     - name: Debug VERSION
