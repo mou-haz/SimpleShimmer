@@ -12,7 +12,9 @@ jobs:
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # required for github-action-get-previous-tag
 
     - name: Verify commit exists in origin/main
       run: |
@@ -23,44 +25,45 @@ jobs:
       timeout-minutes: 10
       uses: "./.github/steps/install_dependencies"
 
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.3.1
-    
     - name: Set VERSION variable from tag
       run: |
           $VERSION = "${{ github.ref }}" -replace 'refs/tags/v', ''
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       shell: pwsh # Use PowerShell for better string handling
     #  run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-    
-    - name: Set VERSION variable from tag
-      shell: pwsh
-      run: echo "VERSION2=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-    
-    - name: Debug VERSION
-      run: echo "Version is ${{ env.VERSION }}"
+  
+    - name: Get Previous tag
+      id: previoustag
+      uses: 'WyriHaximus/github-action-get-previous-tag@v1'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
+        
+    - name: Get next version
+      id: next
+      uses: 'WyriHaximus/github-action-next-release-version@1.0.0'
+      with:
+        version: ${{ steps.previoustag.outputs.tag }}
 
-    - name: Debug VERSION2
-      run: echo "Version is ${VERSION2}, Version2 is ${VERSION}"
+    - name: New VERSION
+      run: echo "New Version is ${{ steps.next.outputs.version }}"
 
     - name: Build SimpleShimmer
-      run: msbuild ./SimpleShimmer.csproj /r /property:Configuration=Release
+      run: dotnet build --configuration Release --runtime win-x64
 
     - name: Test
       run: dotnet test --configuration Release --runtime win-x64 --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${{ env.VERSION }} --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=$${{ steps.next.outputs.version }} --no-build --output .
 
     #- name: Pack
     #  shell: pwsh
     #  run: msbuild ./SimpleShimmer.csproj /t:pack /property:Configuration=Release
 
     - name: Push to NuGet
-      run: dotnet nuget push SimpleShimmer.${{ env.VERSION }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
+      run: dotnet nuget push SimpleShimmer.$${{ steps.next.outputs.version }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
 
     - name: Push
-      run: dotnet nuget push SimpleShimmer.${{ env.VERSION }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
+      run: dotnet nuget push SimpleShimmer.$${{ steps.next.outputs.version }}.nupkg --api-key ${GITHUB_TOKEN} --source https://nuget.pkg.github.com/mou-haz/index.json
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
