@@ -32,8 +32,8 @@ jobs:
         gitUserEmail: "github-actions[bot]@users.noreply.github.com"
 
     - run: |
-      echo currentVersion "${{ steps.next_minor.outputs.currentVersion }}"
-      echo nextVersion "${{ steps.next_minor.outputs.nextVersion }}"
+        echo currentVersion "${{ steps.next_minor.outputs.currentVersion }}"
+        echo nextVersion "${{ steps.next_minor.outputs.nextVersion }}"
 
     - name: Build SimpleShimmer
       run: dotnet build --configuration Release
