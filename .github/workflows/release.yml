@@ -27,13 +27,13 @@ jobs:
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
     - name: Build
-      run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:NuGetVersion=${VERSION}
+      run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION}
 
     - name: Test
-      run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build
+      run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} --no-build
 
     - name: Pack
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} /p:NuGetVersion=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:AssemblyVersion=${VERSION} --no-build --output .
 
     - name: Push
       run: dotnet nuget push SimpleShimmer.${VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${GITHUB_TOKEN}
