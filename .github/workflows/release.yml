@@ -32,6 +32,7 @@ jobs:
       run: |
         git tag ${{ steps.next_minor.outputs.patch }}
         git push origin --tags --follow-tags ${{ steps.next_minor.outputs.patch }}
+        git push https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git --tags --follow-tags
 
     - name: Install Dependencies
       timeout-minutes: 10
