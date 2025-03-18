@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
 
     steps:
     - name: Checkout
@@ -31,6 +31,7 @@ jobs:
       uses: "WyriHaximus/github-action-next-semvers@v1"
       with:
         version: ${{ steps.previoustag.outputs.tag }}
+
     - name: 'Create new milestone'
       id: createmilestone
       uses: "WyriHaximus/github-action-create-milestone@v1"
