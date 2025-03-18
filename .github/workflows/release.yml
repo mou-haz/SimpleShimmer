@@ -20,14 +20,14 @@ jobs:
         git branch --remote --contains | grep origin/main
 
     - name: Install Dependencies
-      timeout-minutes: ${{ fromJSON(env.STEP_TIMEOUT_MINUTES) }}
+      timeout-minutes: 10
       uses: "./.github/steps/install_dependencies"
 
     - name: Set VERSION variable from tag
       run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
       
     - name: Build
-      run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION}
+      run: dotnet build --configuration Release --runtime win-x64 /p:Version=${VERSION} /p:NuGetVersion=${VERSION}
 
     - name: Test
       run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build
