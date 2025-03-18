@@ -37,11 +37,11 @@ jobs:
 
     - name: Test
       shell: cmd
-      run: dotnet test --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build
+      run: dotnet test --configuration Release --runtime win-x64 --no-build
 
     - name: Pack
       shell: cmd
-      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release --runtime win-x64 /p:Version=%VERSION% --no-build --output .
 
     #- name: Pack
     #  shell: pwsh
