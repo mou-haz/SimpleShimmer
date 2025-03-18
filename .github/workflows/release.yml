@@ -16,31 +16,22 @@ jobs:
       with:
         fetch-depth: 0
     
-    - name: Fetch Tags
-      run: git fetch --tags
-
     - name: Get Previous tag
       id: previoustag
       uses: 'WyriHaximus/github-action-get-previous-tag@v1'
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
         
-    - name: New VERSION
-      run: echo "VERSION=${{ steps.previoustag.outputs.patch }}"
-
     - name: Get next minor version
       id: next_minor
       uses: "WyriHaximus/github-action-next-semvers@v1"
       with:
         version: ${{ steps.previoustag.outputs.tag }}
 
-    - name: New VERSION
-      run: echo "VERSION=${{ steps.next_minor.outputs.patch }}"
-
     - name: Push New Tag
       run: |
-        git tag ${{ steps.next_minor.outputs.patch }}
-        git push origin --tags --follow-tags ${{ steps.next_minor.outputs.patch }}
+        git tag v${{ steps.next_minor.outputs.patch }}
+        git push origin --tags --follow-tags v${{ steps.next_minor.outputs.patch }}
         git push https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git --tags --follow-tags
 
     - name: Install Dependencies
