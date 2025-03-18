@@ -22,11 +22,17 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
         
+    - name: New VERSION
+      run: echo "VERSION=${{ steps.previoustag.outputs.patch }}"
+
     - name: Get next minor version
       id: next_minor
       uses: "WyriHaximus/github-action-next-semvers@v1"
       with:
         version: ${{ steps.previoustag.outputs.tag }}
+
+    - name: New VERSION
+      run: echo "VERSION=${{ steps.next_minor.outputs.patch }}"
 
     - name: Push New Tag
       run: |
