@@ -35,7 +35,7 @@ jobs:
         git push --atomic https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git v${{ steps.next_minor.outputs.patch }}
 
     - name: Install Dependencies
-      timeout-minutes: 10
+      timeout-minutes: 15
       uses: "./.github/steps/install_dependencies"
 
     - name: Build SimpleShimmer
