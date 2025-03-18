@@ -3,9 +3,10 @@
     <TargetFramework>net9.0-windows10.0.22621.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.22621.0</TargetPlatformMinVersion>
     <RootNamespace>SimpleShimmer</RootNamespace>
-	<PackageId>SimpleShimmer</PackageId>
-	<RepositoryType>git</RepositoryType>
-	<UseWinUI>true</UseWinUI>
+  	<PackageId>SimpleShimmer</PackageId>
+  	<RepositoryType>git</RepositoryType>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+	  <UseWinUI>true</UseWinUI>
   	<Authors>Mohamed Hazem</Authors>
   	<PackageProjectUrl>https://github.com/mouhamedhazem149/SimpleShimmer</PackageProjectUrl>
   	<RepositoryUrl>https://github.com/mouhamedhazem149/SimpleShimmer</RepositoryUrl>
