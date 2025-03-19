@@ -1,16 +1,10 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - main
-      - release/**
+  push: {}
 
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main
-      - release/**
+  pull_request: {}
+
 env:
   STEP_TIMEOUT_MINUTES: 60
 
