@@ -50,5 +50,5 @@ jobs:
     - name: Push to NuGet
       run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
     
-    - name: Push
+    - name: Push to GitHubPackages
       run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.GithubPackages_Key }} --source https://nuget.pkg.github.com/mou-haz/index.json
