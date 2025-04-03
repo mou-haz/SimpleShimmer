@@ -11,44 +11,10 @@ jobs:
     timeout-minutes: 30
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+    - name: Publish Chores
+      uses: mou-haz/GitHub-WorkFlows/.github/steps/package_publish@main
       with:
-        fetch-depth: 0
-    
-    - name: Get Previous tag
-      id: previoustag
-      uses: 'WyriHaximus/github-action-get-previous-tag@v1'
-      env:
-        GITHUB_TOKEN: ${{ secrets.GithubPackages_Key }}
-        
-    - name: Get next minor version
-      id: next_minor
-      uses: "WyriHaximus/github-action-next-semvers@v1"
-      with:
-        version: ${{ steps.previoustag.outputs.tag }}
-
-    - name: Push New Tag
-      run: |
-        git tag v${{ steps.next_minor.outputs.patch }}
-        git push origin --tags --follow-tags v${{ steps.next_minor.outputs.patch }}
-        git push https://mou-haz:${{ secrets.GithubPackages_Key }}@github.com/mou-haz/SimpleShimmer.git --tags --follow-tags
-
-    - name: Install Dependencies
-      timeout-minutes: 10
-      uses: "./.github/steps/install_dependencies"
-
-    - name: Build SimpleShimmer
-      run: dotnet build --configuration Release
-
-    - name: Test
-      run: dotnet test --configuration Release --no-build
-
-    - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${{ steps.next_minor.outputs.patch }} --no-build --output .
-
-    - name: Push to NuGet
-      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.Nu_Key }} --source https://api.nuget.org/v3/index.json 
-    
-    - name: Push to GitHubPackages
-      run: dotnet nuget push SimpleShimmer.${{ steps.next_minor.outputs.patch }}.nupkg --api-key ${{ secrets.GithubPackages_Key }} --source https://nuget.pkg.github.com/mou-haz/index.json
+        token: ${{ secrets.GithubPackages_Key }}
+        repo_name: SimpleShimmer
+        nuget_token: ${{ secrets.Nu_Key }}
+        github_packages_token: ${{ secrets.GithubPackages_Key }}
